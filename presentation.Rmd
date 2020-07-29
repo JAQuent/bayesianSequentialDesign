@@ -1,10 +1,9 @@
 ---
 title: "Bayesian Sequential Designs"
-author: "Jörn Alexander Quent"
+author: "Jörn Alexander Quent, MRC CBU"
 date: "29 July 2020"
 output:
-   slidy_presentation:
-   css: styles.css
+   slidy_presentation
 ---
 
 ```{r setup, include=FALSE}
