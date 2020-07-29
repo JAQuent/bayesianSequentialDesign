@@ -78,7 +78,7 @@ t.value        <- (mean(data) - 0)/standard.error
 ```
 
 
-- The result is $p(data | H_0) = 0.01096585$.
+- The result is $p(data | H_0) = 0.011$.
 - In other words, how likely is our observation (data) under the null hypothesis. 
 - Note, a non-significant p-value doesn't mean the $H_0$ is true 
 - and a significant p-value also doesn't mean that there is a meaningful effect. 
@@ -135,7 +135,6 @@ ttestBF(data)
 ```
 
 - Our $H_1$ is _only_ 3.2 more likely than $H_0$, which only provides anecdotal evidence.
-- BF don't protect your from wrong decision but they quantify evidence and have better properties.   
 
 # A Bayesian way
 - Bayes factors are not ground truth and they depend on our priors and our alternative models.
@@ -330,7 +329,7 @@ kable(table3)
 
 <br>
 
-- Costs for traditional designs:
+Costs for traditional designs:
 
 ```{r, eval = TRUE}
 kable(table2)
@@ -338,7 +337,7 @@ kable(table2)
 
 <br>
 
-- Costs for pure sequential design:
+Costs for pure sequential design:
 ```{r, eval = TRUE}
 table4 <- data.frame(v1 = c(0.5, 0.0),
                      v2 = c(avgN2, avgN1),
@@ -533,9 +532,8 @@ kable(table5)
 # Advantages of sequential designs
 - Sequential designs are much more efficient even without a setting an upper limit. 
 - If planned generically (i.e. for no, small, medium or large effect), biased effect size estimates are no problem. 
-- Configured right, there is high likelihood of obtaining strong evidence regardless of effect size. 
-- The interpretation of BF does not depend on stopping rules (unlike p-values; Rouder, 2014).
-- Consistency property of BFs guarantees that we don't have collect data forever.
+- There is high likelihood of obtaining strong evidence regardless of effect size. 
+- The interpretation of BF does not depend on stopping rules (unlike p-values; Schoenbrodt & Wagenmakers, 2018).
 - Sequential designs should be pre-registered. 
 
 __But__
