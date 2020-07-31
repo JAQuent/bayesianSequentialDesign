@@ -92,7 +92,7 @@ for(i in 1:nIter){
 }
 ```
 
-The code above was used to create the simulation shown bloew. In this example we start with a sample size of 10 and then keep adding 5 more data points until we either reach `crit1` or `crit2`. The true effect size here is 0.0.On the x-axis you find the sample size and on the y-axis you find $BF_{1o$}. Each individual line represents one run in this simulation. 
+The code above was used to create the simulation shown bloew. In this example we start with a sample size of 10 and then keep adding 5 more data points until we either reach `crit1` or `crit2`. The true effect size here is 0.0.On the x-axis you find the sample size and on the y-axis you find $BF_{10}$. Each individual line represents one run in this simulation. 
 
 ![](figures/anim.gif)
 
