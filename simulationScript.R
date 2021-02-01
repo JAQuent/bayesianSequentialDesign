@@ -209,3 +209,6 @@ params      <- data.frame(minN      = rep(10, nIter*2),
 # Create job
 sjob1 <- slurm_apply(helperfunction, params, jobname = 'SequentialDesignWithtLimit_batcheSize1',
                      nodes = n_nodes, cpus_per_node = cpus_per_node, submit = TRUE)
+
+# Saving history for reproducibility to _rslurm_ folder
+duplicateScript(paste0("/"))
