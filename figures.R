@@ -57,7 +57,7 @@ ggsave(file = "figures/student.png", pl, width = width, height = heigth, units =
 # /* 
 # ----------------------------- Traditional design ---------------------------
 # */
-# Calculatge percentage
+# Calculate percentage
 df1_2            <- subset(df1, df1$side == 2)
 df1_2$overCrit1  <- df1_2$bf > 10
 df1_2$belowCrit2 <- df1_2$bf < 1/6

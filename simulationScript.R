@@ -27,18 +27,14 @@ helperfunction <- function(n, d, side){
   results   <- list()
   
   data      <- rnorm(n, d, 1)
-  if(side == 2){
-    # Two sided
-    bf        <- reportBF(ttestBF(data), 4)
-  } else {
-    # One sided
-    bf        <- reportBF(ttestBF(data, nullInterval = c(-Inf, 0))[2], 4)
-  }
+  bf_1        <- reportBF(ttestBF(data, nullInterval = c(-Inf, 0))[2], 4)
+  bf_2        <- reportBF(ttestBF(data), 4)
   
-  results$side <- side
-  results$d    <- d
-  results$n    <- n
-  results$bf   <- bf
+  results <- data.frame(d = d,
+                        n = n,
+                        bf_1 = bf_1,
+                        bf_2 = bf_2)
+
   return(results)
 }
 
@@ -53,7 +49,7 @@ params      <- data.frame(n = c(rep(n, nIter), rep(n, nIter)),
 params      <- rbind(params, params)
 params$side <- c(rep(2, nrow(params)/2), rep(1, nrow(params)/2))
 
-# Submittig jobs
+# Submitting jobs
 sjob1 <- slurm_apply(helperfunction, params, jobname = 'traditionalDesign',
                      nodes = n_nodes, cpus_per_node = cpus_per_node, submit = FALSE)
 
@@ -62,10 +58,7 @@ sjob1 <- slurm_apply(helperfunction, params, jobname = 'traditionalDesign',
 # */
 # Function
 helperfunction <- function(minN, d, crit1, crit2, batchSize, side){
-  bf        <- c()
-  results   <- list()
-  
-  # Create minium sample and calculate BF
+  # Create minimum sample and calculate BF
   i    <- 1
   n    <- as.numeric(minN)
   data <- rnorm(n, d, 1)
@@ -77,31 +70,39 @@ helperfunction <- function(minN, d, crit1, crit2, batchSize, side){
     bf        <- reportBF(ttestBF(data, nullInterval = c(-Inf, 0))[2], 4)
   }
   
+  # Create DF
+  results <- data.frame(index = 1,
+                        d = d, 
+                        n = n,
+                        bf = bf,
+                        crit1 = crit1,
+                        crit2 = crit2,
+                        batchSize = batchSize)
   
   # Within simulation loop
-  while(bf[length(bf)] < crit1 & bf[length(bf)] > crit2){
+  while(bf < crit1 & bf > crit2){
     n         <- n + batchSize
     data      <- c(data, rnorm(batchSize, d, 1))
     if(side == 2){
       # Two sided
-      bf[i + 1] <- reportBF(ttestBF(data), 4)
+      bf <- reportBF(ttestBF(data), 4)
     } else {
       # One sided
-      bf[i + 1] <- reportBF(ttestBF(data, nullInterval = c(-Inf, 0))[2], 4)
+      bf <- reportBF(ttestBF(data, nullInterval = c(-Inf, 0))[2], 4)
     }
     
     i         <- i + 1
+    # Bind to DF
+    results <- rbind(results,  data.frame(index = i,
+                                          d = d, 
+                                          n = n,
+                                          bf = bf,
+                                          crit1 = crit1,
+                                          crit2 = crit2,
+                                          batchSize = batchSize))
   }
   
-  
   # Return results
-  results$side      <- side
-  results$d         <- d
-  results$n         <- n
-  results$bf        <- bf
-  results$crit1     <- crit1
-  results$crit2     <- crit2
-  results$batchSize <- batchSize
   return(results)
 }
 
@@ -122,35 +123,46 @@ sjob1 <- slurm_apply(helperfunction, params, jobname = 'SequentialDesignWithoutL
 # /* 
 # ----------------------------- Sequential design with limit ---------------------------
 # */
+# Note this function can also be run with no limit by setting limit = Inf.
 # Function
 helperfunction <- function(minN, d, crit1, crit2, batchSize, limit){
-  bf        <- c()
-  results   <- list()
-  
-  # Create minium sample and calculate BF
+  # Create minimum sample and calculate BF
   i    <- 1
   n    <- as.numeric(minN)
   data <- rnorm(n, d, 1)
   bf   <- reportBF(ttestBF(data), 4)
   
+  # Create DF
+  results <- data.frame(index = 1,
+                        d = d, 
+                        n = n,
+                        bf = bf,
+                        crit1 = crit1,
+                        crit2 = crit2,
+                        batchSize = batchSize,
+                        limit = limit)
+  
   
   # Within simulation loop
-  while(bf[length(bf)] < crit1 & bf[length(bf)] > crit2 & n < limit){
+  while(bf < crit1 & bf> crit2 & n < limit){
     n         <- n + batchSize
     data      <- c(data, rnorm(batchSize, d, 1))
-    bf[i + 1] <- reportBF(ttestBF(data), 4)
+    bf        <- reportBF(ttestBF(data), 4)
     i         <- i + 1
+    
+    # Bind to DF
+    results <- rbind(results,  data.frame(index = i,
+                                          d = d, 
+                                          n = n,
+                                          bf = bf,
+                                          crit1 = crit1,
+                                          crit2 = crit2,
+                                          batchSize = batchSize,
+                                          limit = limit))
   }
   
   
   # Return results
-  results$d         <- d
-  results$n         <- n
-  results$bf        <- bf
-  results$crit1     <- crit1
-  results$crit2     <- crit2
-  results$batchSize <- batchSize
-  results$limit     <- limit
   return(results)
 }
 
