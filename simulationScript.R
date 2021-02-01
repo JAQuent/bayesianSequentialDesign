@@ -51,7 +51,7 @@ params$side <- c(rep(2, nrow(params)/2), rep(1, nrow(params)/2))
 
 # Submitting jobs
 sjob1 <- slurm_apply(helperfunction, params, jobname = 'traditionalDesign',
-                     nodes = n_nodes, cpus_per_node = cpus_per_node, submit = FALSE)
+                     nodes = n_nodes, cpus_per_node = cpus_per_node, submit = TRUE)
 
 # /* 
 # ----------------------------- Sequential design without limit ---------------------------
@@ -118,7 +118,7 @@ params$side <- c(rep(2, nrow(params)/2), rep(1, nrow(params)/2))
 
 # Create job
 sjob1 <- slurm_apply(helperfunction, params, jobname = 'SequentialDesignWithoutLimit',
-                     nodes = n_nodes, cpus_per_node = cpus_per_node, submit = FALSE)
+                     nodes = n_nodes, cpus_per_node = cpus_per_node, submit = TRUE)
 
 # /* 
 # ----------------------------- Sequential design with limit ---------------------------
@@ -177,7 +177,7 @@ params      <- data.frame(minN      = rep(10, nIter*2),
 
 # Create job
 sjob1 <- slurm_apply(helperfunction, params, jobname = 'SequentialDesignWithtLimit',
-                     nodes = n_nodes, cpus_per_node = cpus_per_node, submit = FALSE)
+                     nodes = n_nodes, cpus_per_node = cpus_per_node, submit = TRUE)
 
 # /* 
 # ----------------------------- Sequential design with limit and with low minimum size ---------------------------
@@ -192,7 +192,7 @@ params      <- data.frame(minN      = rep(2, nIter*2),
 
 # Create job
 sjob1 <- slurm_apply(helperfunction, params, jobname = 'SequentialDesignWithtLimit_lowMinN',
-                     nodes = n_nodes, cpus_per_node = cpus_per_node, submit = FALSE)
+                     nodes = n_nodes, cpus_per_node = cpus_per_node, submit = TRUE)
 
 
 # /* 
@@ -208,4 +208,4 @@ params      <- data.frame(minN      = rep(10, nIter*2),
 
 # Create job
 sjob1 <- slurm_apply(helperfunction, params, jobname = 'SequentialDesignWithtLimit_batcheSize1',
-                     nodes = n_nodes, cpus_per_node = cpus_per_node, submit = FALSE)
+                     nodes = n_nodes, cpus_per_node = cpus_per_node, submit = TRUE)
